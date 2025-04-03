@@ -49,9 +49,9 @@ def loadCam(args, id, cam_info, resolution_scale):
         loaded_mask = resized_image_rgb[3:4, ...]
 
     if cam_info.mask_path != "":
-        mask_np = cv2.imread(cam_info.mask_path, cv2.IMREAD_GRAYSCALE) != 0
-        mask_np = cv2.resize(mask_np, (resolution[0], resolution[1]), interpolation=cv2.INTER_NEAREST)
-        loaded_mask = torch.from_numpy(mask_np)
+        mask_img_np = cv2.imread(cam_info.mask_path, cv2.IMREAD_GRAYSCALE)
+        mask_img_np = cv2.resize(mask_img_np, (resolution[0], resolution[1]), interpolation=cv2.INTER_NEAREST)
+        loaded_mask = torch.from_numpy(mask_img_np) / 255.0
 
     return Camera(colmap_id=cam_info.uid, R=cam_info.R, T=cam_info.T, 
                   FoVx=cam_info.FovX, FoVy=cam_info.FovY, 
