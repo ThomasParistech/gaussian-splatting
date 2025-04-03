@@ -70,7 +70,7 @@ def readColmapCameras(cam_extrinsics, cam_intrinsics, images_folder):
     cam_infos = []
     masks_folder = os.path.join(os.path.dirname(images_folder), "masks")
     if os.path.exists(masks_folder):
-        print("Use provided masks")
+        print(f"Use provided masks from {masks_folder}")
     else:
         masks_folder = None
 
