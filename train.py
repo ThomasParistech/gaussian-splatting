@@ -88,8 +88,8 @@ def training(dataset, opt, pipe, testing_iterations, saving_iterations, checkpoi
 
         # Loss
         gt_image = viewpoint_cam.original_image.cuda()
-        if viewpoint_cam.gt_alpha_mask is not None:
-            mask = viewpoint_cam.gt_alpha_mask.cuda().bool()
+        if viewpoint_cam.binary_mask is not None:
+            mask = viewpoint_cam.binary_mask.cuda()
             gt_image[:, mask[None, ...]] = bg[:, None] # Use the random background for ground truth masked pixels
 
         Ll1 = l1_loss(image, gt_image)
