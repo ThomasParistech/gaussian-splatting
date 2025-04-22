@@ -10,6 +10,7 @@
 #
 
 import os
+import math
 import sys
 from PIL import Image
 from typing import NamedTuple
@@ -91,15 +92,22 @@ def readColmapCameras(cam_extrinsics, cam_intrinsics, images_folder):
 
         if intr.model=="SIMPLE_PINHOLE":
             focal_length_x = intr.params[0]
+            cx = intr.params[1]
+            cy = intr.params[2]
             FovY = focal2fov(focal_length_x, height)
             FovX = focal2fov(focal_length_x, width)
         elif intr.model=="PINHOLE":
             focal_length_x = intr.params[0]
             focal_length_y = intr.params[1]
+            cx = intr.params[2]
+            cy = intr.params[3]
             FovY = focal2fov(focal_length_y, height)
             FovX = focal2fov(focal_length_x, width)
         else:
             assert False, "Colmap camera model not handled: only undistorted datasets (PINHOLE or SIMPLE_PINHOLE cameras) supported!"
+
+        assert math.isclose(cx, width / 2, abs_tol=1e-6) and math.isclose(cy, height / 2, abs_tol=1e-6), \
+                f"Only centered pinhole cameras supported! Got cx={cx:.6f}, cy={cy:.6f}, expected center=({width/2:.6f}, {height/2:.6f})"
 
         image_path = os.path.join(images_folder, os.path.basename(extr.name))
         image_name = os.path.basename(image_path).split(".")[0]
